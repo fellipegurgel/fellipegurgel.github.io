@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="resources/img/dev.ico">
+
+    <title>Resolução Gráfica PPL</title>
+
+    <!-- Index.html core CSS -->
+    <link href="resources/css/index-elements.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="resources/libs/bootstrap-4.0.0-beta.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Resolution-graph core CSS -->
+    <link href="resources/css/resolution-graph.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- NAV BAR -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <h2 class="navbar-brand" href="#">Resolução gráfica de programação linear</h2>
+        <button type="button" class="btn btn-primary">Limpar campos</button>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        <b>
+            <!-- OBJETIVE -->
+            <div class="btn-group" style="float: left;">
+                <select class="selectpicker btn-light max-min">
+                    <option><b>MAXIMIZAR</b></option>
+                    <option><b>minimizar</b></option>
+                </select>
+            </div>
+
+            <!-- OBJECTVE FUNCTION -->
+            <div class="objective-function">
+                <a data-toggle="tooltip" data-placement="bottom" title="Função objetivo"> f(x1, x2) </a> = <input id="objective-function-x1" type="text" class="coefficient"> x1
+                <select class="btn-light" style="height: 32px">
+                    <option>+</option>
+                    <option>-</option>
+                </select>
+                <input id="objective-function-x2" type="text" class="coefficient"> x2
+            </div>
+        </b>
+
+        <br>
+
+        <!-- RESTRICTIONS -->
+        <h4>Restrições:</h4>
+
+        <div id="restrictions-container" class="restrictions">
+
+            <!-- RESTRICTION 0 -->
+            <div class="restriction" id="restriction0" value = "0" onchange="redefineGraph(this)">
+                <input id="x1-0" type="text" class="coefficient"><a> x1 </a>
+                <select class="btn-dark" name="arithmetic-operator">
+                    <option value="plus">+</option>
+                    <option value="minus">-</option>
+                </select>
+                <input id="x2-0" type="text" class="coefficient"><a> x2 </a>
+                <select class="btn-dark comparison-operator">
+                    <option value="less-or-equal"> <= </option>
+                    <option value="greater-or-equal"> >= </option>
+                    <option value="equal"> = </option>
+                </select>
+                <input id="result-0" type="text" class="coefficient">
+            </div>
+        </div>
+
+        <br>
+
+         <!-- ADD RESTRICTION BUTTON -->
+        <button type="button" id="add-restriction" class="btn btn-success" aria-label="Left Align">
+            Adicionar restrição
+        </button>
+
+        <!-- GRAPHIC RESOLUTION SCRIPTS -->
+        <script src="resources/libs/d3.js/d3.min.js"></script>
+        <script src="resources/js/resolution-graph.js"></script>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="resources/libs/bootstrap-4.0.0-beta.2/assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="resources/libs/bootstrap-4.0.0-beta.2/assets/js/vendor/popper.min.js"></script>
+    <script src="resources/libs/bootstrap-4.0.0-beta.2/dist/js/bootstrap.min.js"></script>
+
+    <!-- INDEX SCRIPTS -->
+    <script src="resources/js/index-scripts.js"></script>
+</body>
+</html>
