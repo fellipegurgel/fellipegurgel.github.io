@@ -2,6 +2,7 @@
 .axis line{
     fill: none;
     stroke: black;
+    /*stroke-width: 1.5px;*/
 }
 
 .line{
@@ -14,11 +15,20 @@
 }
 
 .tick line{
-    opacity: 0.2;
+    opacity: 0.4;
 }
 
 .label {
     text-anchor: middle;
     font-weight: bold;
     font-family: inherit;
+}
+
+#graph {
+    margin-left: 10px;
+}
+
+.area {
+    fill: #b366ff;
+    opacity: 0.3;
 }

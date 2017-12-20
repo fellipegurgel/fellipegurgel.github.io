@@ -19,7 +19,7 @@ var yScale = d3.scale.linear()
     .range([height, 0]);
 // ARRAY OF COLORS, LIMITED IN 12 COLORS
 var colorsArray = ["RoyalBlue",
-                   "Chartreuse",
+                   "Crimson",
                    "BlueViolet",
                    "Tomato",
                    "Navy",
@@ -141,12 +141,26 @@ function drawLine(dataset, restrictionNumber, svg) {
             return yScale(d.y);
         });
 
+    var area = d3.svg.area()
+        .x(function(d) { return xScale(d.x); })
+        .y0(height)
+        .y1(function(d) { return yScale(d.y); });
+
     // APPENDING THE LINE TO THE SVG GRAPH
     svg.append("path")
         .data([lineDataset])
         .attr("class", "line")
         .attr("d", line)
         .attr("stroke", setLineColor(restrictionNumber));
+
+        console.log("line dataset >> ");
+    console.log(lineDataset);
+    //var teste = [{x: 35, y: 25}, {x: 50, y: 25}, {x: 35, y: 0}, {x: 100, y: 0}];
+//
+    svg.append("path")
+        .datum(lineDataset)
+        .attr("class", "area")
+        .attr("d", area);
 }
 
 function setLineColor(restrictionNumber) {
