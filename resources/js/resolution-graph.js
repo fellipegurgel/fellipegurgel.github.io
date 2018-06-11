@@ -153,12 +153,14 @@ function drawLine(dataset, restrictionNumber, svg) {
         .attr("d", line)
         .attr("stroke", setLineColor(restrictionNumber));
 
-        console.log("line dataset >> ");
+    console.log("line dataset >> ");
     console.log(lineDataset);
-    //var teste = [{x: 35, y: 25}, {x: 50, y: 25}, {x: 35, y: 0}, {x: 100, y: 0}];
-//
+
+    // PAINTING THE AREA
+    var teste = [{x: 35, y: 25}, {x: 35, y: 0}, {x: 50, y: 25}];
+    var teste2 = [{x: 25, y: 15}, {x: 40, y: 15}, {x: 25, y: 0}, {x: 100, y: 0}];
     svg.append("path")
-        .datum(lineDataset)
+        .datum(teste)
         .attr("class", "area")
         .attr("d", area);
 }
