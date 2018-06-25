@@ -40,6 +40,7 @@ var colorsArray = ["RoyalBlue",
                    "Gold",
                    "Black"];
 var colorsArrayLenght = colorsArray.length;
+//var constraintsArrayLength = 0;
 /** END OF CONTROL VARIABLES **/
 
 // DRAWING THE DEFAULT GRAPH (WHEN PAGE IS INITIALLY LOADED)
@@ -128,7 +129,7 @@ function updateGraphScale(){
 }
 
 // DRAWS A LINE ON THE GRAPH
-function drawLine(dataset, restrictionNumber, svg) {
+function drawLine(dataset, constraintNumber, svg) {
 
     var lineDataset = [{x: dataset[0].x, y:dataset[0].y},{
                        x: dataset[1].x, y:dataset[1].y}];
@@ -158,7 +159,7 @@ function drawLine(dataset, restrictionNumber, svg) {
         .data([lineDataset])
         .attr("class", "line")
         .attr("d", line)
-        .attr("stroke", setLineColor(restrictionNumber));
+        .attr("stroke", setLineColor(constraintNumber));
 
     // TESTES PINTAR AREA
     // console.log("line dataset >> ");
@@ -171,25 +172,26 @@ function drawLine(dataset, restrictionNumber, svg) {
         .datum(lineDataset)
         .attr("class", "area")
         .attr("d", area);
+
 }
 
 
 // SETS A COLOR TO A LINE ACCORDING TO ITS CONSTRAINT NUMBER
-function setLineColor(restrictionNumber) {
-    var colorIndex = restrictionNumber%colorsArrayLenght;
+function setLineColor(constraintNumber) {
+    var colorIndex = constraintNumber%colorsArrayLenght;
     return colorsArray[colorIndex];
 }
 
 // REDRAWS THE WHOLE GRAPH BASED ON CONSTRAINTS CHANGES
-function redefineGraph(restriction) {
+function redefineGraph(constraint) {
 
     // GETTING THE INPUTS
-    var inputs = restriction.getElementsByClassName('coefficient');
+    var inputs = constraint.getElementsByClassName('coefficient');
     var x1 = parseInt(inputs[0].value) || 0;
     var x2 = parseInt(inputs[1].value) || 0;
     var limitValue = parseInt(inputs[2].value) || 0;
-    var arithmeticOperator = restriction.getElementsByTagName('select')[0];
-    var restrictionNumber = parseInt(restriction.getAttribute('value'));
+    var arithmeticOperator = constraint.getElementsByTagName('select')[0];
+    var constraintNumber = parseInt(constraint.getAttribute('value'));
     var scaleDataset;
     var lineDataset;
 
@@ -200,7 +202,7 @@ function redefineGraph(restriction) {
 
     // SAVING THE CONSTRAINT COEFFICIENTS INTO AN ARRAY
     var constraintObject = {
-        number: restrictionNumber,
+        number: constraintNumber,
         x1: x1,
         x2: x2,
         limit: limitValue
@@ -212,19 +214,19 @@ function redefineGraph(restriction) {
         if(x2 !== 0){
             //
             scaleDataset = {x: Math.ceil(limitValue/x1), y: Math.ceil(limitValue/x2)};
-            graphScalesArray[restrictionNumber] = scaleDataset;
+            graphScalesArray[constraintNumber] = scaleDataset;
             updateGraphScale(graphScalesArray);
 
             lineDataset = [
-                {x: 0, y: Math.ceil(limitValue/x2)},
-                {x: Math.ceil(limitValue/x1), y: 0}
+                {x: 0, y: limitValue/x2},
+                {x: limitValue/x1, y: 0}
             ];
 
             constraintObject.type = 1;
 
         } else { /** ONLY x1 IS SET **/
             scaleDataset = {x: Math.ceil(limitValue/x1), y: Math.ceil(limitValue/x1)};
-            graphScalesArray[restrictionNumber] = scaleDataset;
+            graphScalesArray[constraintNumber] = scaleDataset;
             updateGraphScale(graphScalesArray);
 
             lineDataset = [
@@ -238,7 +240,7 @@ function redefineGraph(restriction) {
         /** ONLY x2 IS SET **/
         if(x2 !== 0){
             scaleDataset = {x: Math.ceil(limitValue/x2), y: Math.ceil(limitValue/x2)};
-            graphScalesArray[restrictionNumber] = scaleDataset;
+            graphScalesArray[constraintNumber] = scaleDataset;
             updateGraphScale(graphScalesArray);
 
             lineDataset = [
@@ -257,10 +259,10 @@ function redefineGraph(restriction) {
     }
 
     // ADDING THE NEW LINE TO THE ARRAY OF LINES
-    linesArray[restrictionNumber] = lineDataset;
+    linesArray[constraintNumber] = lineDataset;
 
     // ADDING THE NEW CONSTRAINT TO THE ARRAY OF CONSTRAINTS
-    constraintsArray[restrictionNumber] = constraintObject;
+    constraintsArray.push(JSON.parse(JSON.stringify(constraintObject)));
 
     // DRAWING THE WHOLE GRAPH AREA AGAIN WITH UPDATED SCALES
     drawGraph();
@@ -271,16 +273,20 @@ function redefineGraph(restriction) {
     }
 
     // CALCULATING THE CONCURRENT POINTS
-    calculateIntersectionPoints(constraintsArray);
+    calculateIntersectionPoints();
+
+    // PLOTTING THE INTERSECTION POINTS BASED ON NEW SCALE
+    plotIntersectionPoints(d3.select('#graph-child'));
 
     console.log("intersection points: ")
     console.log(intersectionPointsArray);
 }
 
 // BASED ON THE CONSTRAINTS EQUATIONS, FIND ALL THE INTERSECTION POINTS, IF EXISTS
-function calculateIntersectionPoints(constraintsArray){
-    var i, j = 0;
+function calculateIntersectionPoints(){
+    intersectionPointsArray = new Array();
     var constraintsArrayLength = constraintsArray.length;
+    var i, j = 0;
     var equation1, equation2;
     var intersectionPointObject = {
         x: 0,
@@ -352,22 +358,41 @@ function calculateIntersectionPoints(constraintsArray){
                 intersectionPointObject.y = a1*intersectionPointObject.x + b1;
             }
 
-            intersectionPointsArray.push(intersectionPointObject);
+            // adding the intersection point object to an array of points
+            if(intersectionPointObject.x !== 0 && intersectionPointObject.y !== 0) {
+                intersectionPointsArray.push(JSON.parse(JSON.stringify(intersectionPointObject)));
+            }
+
+            // reset object values
+            intersectionPointObject.x = 0;
+            intersectionPointObject.y = 0;
+            intersectionPointObject.objectiveFunctionResult = 0;
         }
     }
 }
 
-
+function plotIntersectionPoints(svg){
+    svg.selectAll("circle")
+        .data(intersectionPointsArray)
+        .enter()
+        .append("circle")
+        .attr("r", 4)
+        .attr("cx", function(d) { return xScale(d.x); })
+        .attr("cy", function(d) { return yScale(d.y); })
+}
 
 // TODO: RENAME IT TO REMOVE CONSTRAINT
 // REMOVES A LINE FROM THE GRAPH AREA
-function removeLine(restrictionNumber){
+function removeLine(constraintNumber){
     var resetLineDataset = [{x: 0, y: 0},
                         {x: 0, y: 0}];
     var resetScaleDataset = [{x: 0, y: 0}];
 
-    linesArray[restrictionNumber] = resetLineDataset;
-    graphScalesArray[restrictionNumber] = resetScaleDataset;
+    linesArray[constraintNumber] = resetLineDataset;
+    graphScalesArray[constraintNumber] = resetScaleDataset;
+    constraintsArray = constraintsArray.filter(function(constraint) {
+        return constraint.number !== parseInt(constraintNumber);
+    });
 
     updateGraphScale();
 
@@ -376,4 +401,6 @@ function removeLine(restrictionNumber){
     for (i = 0 ; i < linesArray.length ; i++) {
         drawLine(linesArray[i], i, d3.select('#graph-child'));
     }
+
+    calculateIntersectionPoints();
 }
