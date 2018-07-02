@@ -40,7 +40,11 @@ var colorsArray = ["RoyalBlue",
                    "Gold",
                    "Black"];
 var colorsArrayLenght = colorsArray.length;
-//var constraintsArrayLength = 0;
+var objectiveFunctionObject = {
+    goal: '',
+    x1: 0,
+    x2: 0
+}
 /** END OF CONTROL VARIABLES **/
 
 // DRAWING THE DEFAULT GRAPH (WHEN PAGE IS INITIALLY LOADED)
@@ -194,6 +198,16 @@ function drawLine(dataset, constraintNumber, svg) {
 
 }
 
+function setObjectiveFunction(goal, objectiveFunction){
+    objectiveFunctionObject.goal = goal.options[goal.selectedIndex].value;
+
+    if(objectiveFunction !== null) {
+        var inputs = objectiveFunction.getElementsByClassName('coefficient');
+        objectiveFunctionObject.x1 = parseInt(inputs[0].value) || 0;
+        objectiveFunctionObject.x2 = parseInt(inputs[1].value) || 0;
+    }
+}
+
 
 // SETS A COLOR TO A LINE ACCORDING TO ITS CONSTRAINT NUMBER
 function setLineColor(constraintNumber) {
@@ -209,7 +223,7 @@ function redefineGraph(constraint) {
     var x1 = parseInt(inputs[0].value) || 0;
     var x2 = parseInt(inputs[1].value) || 0;
     var limitValue = parseInt(inputs[2].value) || 0;
-    var arithmeticOperator = constraint.getElementsByTagName('select')[0];
+    //var arithmeticOperator = constraint.getElementsByTagName('select')[0];
     var constraintNumber = parseInt(constraint.getAttribute('value'));
     var scaleDataset;
     var lineDataset;
@@ -379,6 +393,9 @@ function calculateIntersectionPoints(){
 
             // adding the intersection point object to an array of points
             if(intersectionPointObject.x !== 0 && intersectionPointObject.y !== 0) {
+                intersectionPointObject.objectiveFunctionResult =
+                    intersectionPointObject.x * objectiveFunctionObject.x1 +
+                    intersectionPointObject.y * objectiveFunctionObject.x2;
                 intersectionPointsArray.push(JSON.parse(JSON.stringify(intersectionPointObject)));
             }
 

@@ -33,21 +33,22 @@
         <b>
             <!-- OBJETIVE -->
             <h5 style="float: left;">Objetivo: </h5>
-            <div class="btn-group">
-                <select class="selectpicker btn-light max-min">
-                    <option><b>MAXIMIZAR</b></option>
-                    <option><b>minimizar</b></option>
+            <div class="btn-group" onchange="setObjectiveFunction(document.getElementById('goal'), null)">
+                <select class="selectpicker btn-light max-min" id="goal">
+                    <option value="max"><b>MAXIMIZAR</b></option>
+                    <option value="min"><b>minimizar</b></option>
                 </select>
             </div>
 
             <!-- OBJECTVE FUNCTION -->
             <br><br>
-            <div class="objective-function">
-                <a data-toggle="tooltip" data-placement="bottom" title="Função objetivo"> f(x1, x2) </a> = <input id="objective-function-x1" type="text" class="coefficient"> x1
-                <select class="btn-light" style="height: 24px">
-                    <option>+</option>
-                    <option>-</option>
-                </select>
+            <div class="objective-function" onchange="setObjectiveFunction(document.getElementById('goal'), this)">
+                <a data-toggle="tooltip" data-placement="bottom" title="Função objetivo"> f(x1, x2) </a> =
+                <input id="objective-function-x1" type="text" class="coefficient"> x1 +
+                <!--<select class="btn-light" style="height: 24px">-->
+                    <!--<option>+</option>-->
+                    <!--<option>-</option>-->
+                <!--</select>-->
                 <input id="objective-function-x2" type="text" class="coefficient"> x2
             </div>
         </b>

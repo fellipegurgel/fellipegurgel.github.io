@@ -4,6 +4,7 @@
 
 var restrictionNumber = 1;
 
+// var goal = document.findElementById('goal');
 // Add restriction function: add a new div restriction to the list
 document.getElementById("add-restriction").onclick = function () {
     var ok = true;
