@@ -25,10 +25,16 @@
 }
 
 #graph {
-    margin-left: 10px;
+    /*margin-left: 10px;*/
+    /*float: right;*/
 }
 
 .area {
     fill: #b366ff;
     opacity: 0.3;
+}
+
+.area2 {
+    fill: #ffc018;
+    opacity: 1;
 }

@@ -4,9 +4,9 @@
 
 /** CONTROL VARIABLES **/
 // SETTING UP GRAPH SIZE
-var margin = {top: 20, right: 100, bottom: 30, left: 70},
-    width = 920 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+var margin = {top: 20, right: 90, bottom: 30, left: 40},
+    width = 850 - margin.left - margin.right,
+    height = 460 - margin.top - margin.bottom;
 
 // DEFAULT MAX NUMBERS ON AXIS
 var maxXscale = 10;
@@ -82,27 +82,46 @@ function drawGraph() {
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
-
+    // text label for the x1 axis
     svg.append("text")
         .attr("transform",
-            "translate(" + (width/2) + " ," +
-            (height + margin.top + 20) + ")")
+            "translate(733  , 410)")
         .attr("class", "label")
         .text("x1");
+    // svg.append("text")
+    //     .attr("transform",
+    //         "translate(" + (width/2) + " ," +
+    //         (height + margin.top + 20) + ")")
+    //     .attr("class", "label")
+    //     .text("x1");
 
     // APPENDING THE Y AXIS TO THE GRAPH
     svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
-
-    // text label for the y axis
+    // text label for the x2 axis
     svg.append("text")
-        .attr("transform", "rotate(-90)")
+        .attr("transform", "translate(213,20)")
         .attr("y", 0 - margin.left)
         .attr("x",0 - (height / 2))
         .attr("dy", "1em")
         .attr("class", "label")
         .text("x2");
+    // svg.append("text")
+    //     .attr("transform", "rotate(-90)")
+    //     .attr("y", 0 - margin.left)
+    //     .attr("x",0 - (height / 2))
+    //     .attr("dy", "1em")
+    //     .attr("class", "label")
+    //     .text("x2");
+
+    // var teste = [{x: 5, y: 10}, {x: 5, y: 0}, {x: 10, y: 5}];
+    // var teste2 = [{x: 25, y: 15}, {x: 40, y: 15}, {x: 25, y: 0}, {x: 100, y: 0}];
+    //
+    // svg.append("path")
+    //     .datum(teste)
+    //     .attr("class", "area")
+    //     .attr("d", area);
 }
 
 // UPDATES THE SCALE (WHEN THERE ARE CHANGES ON CONSTRAINTS)
@@ -166,12 +185,12 @@ function drawLine(dataset, constraintNumber, svg) {
     // console.log(lineDataset);
 
     // PAINTING THE AREA
-    var teste = [{x: 35, y: 25}, {x: 35, y: 0}, {x: 50, y: 25}];
-    var teste2 = [{x: 25, y: 15}, {x: 40, y: 15}, {x: 25, y: 0}, {x: 100, y: 0}];
-    svg.append("path")
-        .datum(lineDataset)
-        .attr("class", "area")
-        .attr("d", area);
+    // var teste = [{x: 35, y: 25}, {x: 35, y: 0}, {x: 50, y: 25}];
+    // var teste2 = [{x: 25, y: 15}, {x: 40, y: 15}, {x: 25, y: 0}, {x: 100, y: 0}];
+    // svg.append("path")
+    //     .datum(lineDataset)
+    //     .attr("class", "area")
+    //     .attr("d", area);
 
 }
 
@@ -262,7 +281,7 @@ function redefineGraph(constraint) {
     linesArray[constraintNumber] = lineDataset;
 
     // ADDING THE NEW CONSTRAINT TO THE ARRAY OF CONSTRAINTS
-    constraintsArray.push(JSON.parse(JSON.stringify(constraintObject)));
+    addingToConstraintsArray(constraintObject);
 
     // DRAWING THE WHOLE GRAPH AREA AGAIN WITH UPDATED SCALES
     drawGraph();
@@ -278,8 +297,8 @@ function redefineGraph(constraint) {
     // PLOTTING THE INTERSECTION POINTS BASED ON NEW SCALE
     plotIntersectionPoints(d3.select('#graph-child'));
 
-    console.log("intersection points: ")
-    console.log(intersectionPointsArray);
+    // console.log("intersection points: ");
+    // console.log(intersectionPointsArray);
 }
 
 // BASED ON THE CONSTRAINTS EQUATIONS, FIND ALL THE INTERSECTION POINTS, IF EXISTS
@@ -379,6 +398,18 @@ function plotIntersectionPoints(svg){
         .attr("r", 4)
         .attr("cx", function(d) { return xScale(d.x); })
         .attr("cy", function(d) { return yScale(d.y); })
+}
+
+function addingToConstraintsArray(constraintObject){
+
+    for(var index in constraintsArray){
+        if(parseInt(constraintsArray[index].number) === constraintObject.number) {
+            constraintsArray[index] = JSON.parse(JSON.stringify(constraintObject));
+            return;
+        }
+    }
+
+    constraintsArray.push(JSON.parse(JSON.stringify(constraintObject)));
 }
 
 // TODO: RENAME IT TO REMOVE CONSTRAINT
