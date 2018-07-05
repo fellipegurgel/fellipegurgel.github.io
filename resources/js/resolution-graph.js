@@ -25,6 +25,7 @@ var graphScalesArray = [];
 var linesArray = [];
 var constraintsArray = [];
 var intersectionPointsArray = [];
+var farEndingsPointsArray = [];
 
 // ARRAY OF COLORS, LIMITED IN 12 COLORS
 var colorsArray = ["RoyalBlue",
@@ -78,7 +79,7 @@ function drawGraph() {
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom+20)
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .attr("transform", "translate(" + (margin.left+35) + "," + margin.top + ")")
         .attr("id", "graph-child");
 
     // APPENDING THE X AXIS TO THE GRAPH
@@ -294,6 +295,9 @@ function redefineGraph(constraint) {
     // ADDING THE NEW LINE TO THE ARRAY OF LINES
     linesArray[constraintNumber] = lineDataset;
 
+    // ADDING TO FAR-ENDINGS-ARRAY
+    addingToFarEndingsArray(constraintObject.type, constraintNumber, lineDataset);
+
     // ADDING THE NEW CONSTRAINT TO THE ARRAY OF CONSTRAINTS
     addingToConstraintsArray(constraintObject);
 
@@ -415,6 +419,14 @@ function plotIntersectionPoints(svg){
         .attr("r", 4)
         .attr("cx", function(d) { return xScale(d.x); })
         .attr("cy", function(d) { return yScale(d.y); })
+
+    svg.selectAll("circle2")
+        .data(farEndingsPointsArray)
+        .enter()
+        .append("circle")
+        .attr("r", 4)
+        .attr("cx", function(d) { return xScale(d.x); })
+        .attr("cy", function(d) { return yScale(d.y); })
 }
 
 function addingToConstraintsArray(constraintObject){
@@ -442,6 +454,10 @@ function removeLine(constraintNumber){
         return constraint.number !== parseInt(constraintNumber);
     });
 
+    farEndingsPointsArray = farEndingsPointsArray.filter(function(constraint) {
+        return constraint.constraintNumber !== parseInt(constraintNumber);
+    });
+
     updateGraphScale();
 
     drawGraph();
@@ -451,4 +467,44 @@ function removeLine(constraintNumber){
     }
 
     calculateIntersectionPoints();
+
+    plotIntersectionPoints(d3.select('#graph-child'));
+}
+
+function addingToFarEndingsArray(constraintType, constraintNumber, lineDataset){
+
+    farEndingsPointsArray = farEndingsPointsArray.filter(function(constraint) {
+        return constraint.constraintNumber !== parseInt(constraintNumber);
+    });
+
+    var farEndingPointObject = {
+        constraintNumber: constraintNumber,
+        x: 0,
+        y: 0,
+        objectiveFunctionResult: 0
+    };
+
+    if(constraintType === 1){
+        var farEndingPointObject2 = {
+            constraintNumber: constraintNumber,
+            x: 0,
+            y: 0,
+            objectiveFunctionResult: 0
+        };
+
+        farEndingPointObject2.x = lineDataset[1].x;
+        farEndingPointObject2.y = lineDataset[1].y;
+        farEndingPointObject2.objectiveFunctionResult =
+            farEndingPointObject2.x * objectiveFunctionObject.x1 +
+            farEndingPointObject2.y * objectiveFunctionObject.x2;
+
+        farEndingsPointsArray.push(JSON.parse(JSON.stringify(farEndingPointObject2)));
+    }
+    farEndingPointObject.x = lineDataset[0].x;
+    farEndingPointObject.y = lineDataset[0].y;
+    farEndingPointObject.objectiveFunctionResult =
+        farEndingPointObject.x * objectiveFunctionObject.x1 +
+        farEndingPointObject.y * objectiveFunctionObject.x2;
+
+    farEndingsPointsArray.push(JSON.parse(JSON.stringify(farEndingPointObject)));
 }
