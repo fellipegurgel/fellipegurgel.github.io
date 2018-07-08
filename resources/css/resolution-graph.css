@@ -38,3 +38,8 @@
     fill: #ffc018;
     opacity: 1;
 }
+
+.div bs-tooltip-top {
+    max-width: 70px;
+    height: auto;
+}

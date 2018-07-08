@@ -100,7 +100,7 @@ function removeRestriction(restrictionNumber) {
     var restrictionToBeRemoved = document.getElementById('restriction'+restrictionNumber);
     restrictionToBeRemoved.remove();
     hideTooltip();
-    removeLine(restrictionNumber);
+    removeConstraint(restrictionNumber);
 };
 
 // Tooltip functions

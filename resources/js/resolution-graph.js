@@ -412,9 +412,14 @@ function calculateIntersectionPoints(){
 }
 
 function plotIntersectionPoints(svg){
+
     svg.selectAll("circle")
         .data(intersectionPointsArray)
         .enter()
+        .append("a")
+        .attr("data-toggle", "tooltip")
+        .attr("data-placement", "top")
+        .attr("data-original-title", function(d){ return "("+d.x+","+d.y+") | FO = "+d.objectiveFunctionResult;})
         .append("circle")
         .attr("r", 4)
         .attr("cx", function(d) { return xScale(d.x); })
@@ -423,10 +428,16 @@ function plotIntersectionPoints(svg){
     svg.selectAll("circle2")
         .data(farEndingsPointsArray)
         .enter()
+        .append("a")
+        .attr("data-toggle", "tooltip")
+        .attr("data-placement", "top")
+        .attr("data-original-title", function(d){ return "("+d.x+","+d.y+") | FO = "+d.objectiveFunctionResult;})
         .append("circle")
         .attr("r", 4)
         .attr("cx", function(d) { return xScale(d.x); })
-        .attr("cy", function(d) { return yScale(d.y); })
+        .attr("cy", function(d) { return yScale(d.y); });
+
+    tooltip();
 }
 
 function addingToConstraintsArray(constraintObject){
@@ -443,7 +454,7 @@ function addingToConstraintsArray(constraintObject){
 
 // TODO: RENAME IT TO REMOVE CONSTRAINT
 // REMOVES A LINE FROM THE GRAPH AREA
-function removeLine(constraintNumber){
+function removeConstraint(constraintNumber){
     var resetLineDataset = [{x: 0, y: 0},
                         {x: 0, y: 0}];
     var resetScaleDataset = [{x: 0, y: 0}];
