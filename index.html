@@ -30,57 +30,58 @@
     <!-- MAIN CONTAINER -->
     <div class="main-container">
         <div class="user-inputs">
-        <b>
-            <!-- OBJETIVE -->
-            <h5 style="float: left;">Objetivo: </h5>
-            <div class="btn-group" onchange="setObjectiveFunction(document.getElementById('goal'), null)">
-                <select class="selectpicker btn-light max-min" id="goal">
-                    <option value="max"><b>MAXIMIZAR</b></option>
-                    <option value="min"><b>minimizar</b></option>
-                </select>
+            <b>
+                <!-- OBJECTIVE -->
+                <h5 style="float: left;">Objetivo: </h5>
+                <div class="btn-group" onchange="setObjectiveFunction(document.getElementById('goal'), null)">
+                    <select class="selectpicker btn-light max-min" id="goal">
+                        <option value="max"><b>MAXIMIZAR</b></option>
+                        <option value="min"><b>minimizar</b></option>
+                    </select>
+                </div>
+
+                <!-- OBJECTIVE FUNCTION -->
+                <br><br>
+                <div class="objective-function" onchange="setObjectiveFunction(document.getElementById('goal'), this)">
+                    <a class="tooltip2" data-toggle="tooltip" data-placement="bottom" title="Função objetivo"> f(x1, x2) </a> =
+                    <input id="objective-function-x1" type="text" class="coefficient"> x1 +
+                    <!--<select class="btn-light" style="height: 24px">-->
+                        <!--<option>+</option>-->
+                        <!--<option>-</option>-->
+                    <!--</select>-->
+                    <input id="objective-function-x2" type="text" class="coefficient"> x2
+                </div>
+            </b>
+            <br>
+            <!-- RESTRICTIONS -->
+            <h5>Restrições:</h5>
+                <p style="font-weight: normal; margin-bottom: 0">x1 e x2 &ne; 0</p>
+            <div id="restrictions-container" class="restrictions">
+
+                <!-- RESTRICTION 0 -->
+                <div class="restriction" id="restriction0" value = "0" onchange="redefineGraph(this)">
+                    <input id="x1-0" type="text" class="coefficient"><a> x1 + </a>
+                    <!--<select class="btn-dark" name="arithmetic-operator">-->
+                        <!--<option value="plus">+</option>-->
+                        <!--<option value="minus">-</option>-->
+                    <!--</select>-->
+                    <input id="x2-0" type="text" class="coefficient"><a> x2 </a>
+                    <select class="btn-light comparison-operator">
+                        <option value="less-or-equal"> &le; </option>
+                        <option value="greater-or-equal"> &ge; </option>
+                        <option value="equal"> = </option>
+                    </select>
+                    <input id="result-0" type="text" class="coefficient">
+                </div>
             </div>
 
-            <!-- OBJECTVE FUNCTION -->
-            <br><br>
-            <div class="objective-function" onchange="setObjectiveFunction(document.getElementById('goal'), this)">
-                <a class="tooltip2" data-toggle="tooltip" data-placement="bottom" title="Função objetivo"> f(x1, x2) </a> =
-                <input id="objective-function-x1" type="text" class="coefficient"> x1 +
-                <!--<select class="btn-light" style="height: 24px">-->
-                    <!--<option>+</option>-->
-                    <!--<option>-</option>-->
-                <!--</select>-->
-                <input id="objective-function-x2" type="text" class="coefficient"> x2
-            </div>
-        </b>
-        <br>
-        <!-- RESTRICTIONS -->
-        <h5>Restrições:</h5>
-            <p style="font-weight: normal; margin-bottom: 0">x1 e x2 &ne; 0</p>
-        <div id="restrictions-container" class="restrictions">
+            <br>
 
-            <!-- RESTRICTION 0 -->
-            <div class="restriction" id="restriction0" value = "0" onchange="redefineGraph(this)">
-                <input id="x1-0" type="text" class="coefficient"><a> x1 + </a>
-                <!--<select class="btn-dark" name="arithmetic-operator">-->
-                    <!--<option value="plus">+</option>-->
-                    <!--<option value="minus">-</option>-->
-                <!--</select>-->
-                <input id="x2-0" type="text" class="coefficient"><a> x2 </a>
-                <select class="btn-light comparison-operator">
-                    <option value="less-or-equal"> &le; </option>
-                    <option value="greater-or-equal"> &ge; </option>
-                    <option value="equal"> = </option>
-                </select>
-                <input id="result-0" type="text" class="coefficient">
-            </div>
+            <!-- ADD RESTRICTION BUTTON -->
+            <button type="button" id="add-restriction" class="btn btn-success" aria-label="Left Align">
+                Adicionar restrição
+            </button>
         </div>
-
-        <br>
-
-         <!-- ADD RESTRICTION BUTTON -->
-        <button type="button" id="add-restriction" class="btn btn-success" aria-label="Left Align">
-            Adicionar restrição
-        </button>
 
         <!-- GRAPHIC RESOLUTION SCRIPTS -->
         <script src="vendors/d3.js/d3.min.js"></script>
