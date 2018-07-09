@@ -45,7 +45,7 @@ var objectiveFunctionObject = {
     goal: '',
     x1: 0,
     x2: 0
-}
+};
 /** END OF CONTROL VARIABLES **/
 
 // DRAWING THE DEFAULT GRAPH (WHEN PAGE IS INITIALLY LOADED)
@@ -112,21 +112,6 @@ function drawGraph() {
         .attr("dy", "1em")
         .attr("class", "label")
         .text("x2");
-    // svg.append("text")
-    //     .attr("transform", "rotate(-90)")
-    //     .attr("y", 0 - margin.left)
-    //     .attr("x",0 - (height / 2))
-    //     .attr("dy", "1em")
-    //     .attr("class", "label")
-    //     .text("x2");
-
-    // var teste = [{x: 5, y: 10}, {x: 5, y: 0}, {x: 10, y: 5}];
-    // var teste2 = [{x: 25, y: 15}, {x: 40, y: 15}, {x: 25, y: 0}, {x: 100, y: 0}];
-    //
-    // svg.append("path")
-    //     .datum(teste)
-    //     .attr("class", "area")
-    //     .attr("d", area);
 }
 
 // UPDATES THE SCALE (WHEN THERE ARE CHANGES ON CONSTRAINTS)
@@ -173,30 +158,12 @@ function drawLine(dataset, constraintNumber, svg) {
             return yScale(d.y);
         });
 
-    var area = d3.svg.area()
-        .x(function(d) { return xScale(d.x); })
-        .y0(height)
-        .y1(function(d) { return yScale(d.y); });
-
     // APPENDING THE LINE TO THE SVG GRAPH
     svg.append("path")
         .data([lineDataset])
         .attr("class", "line")
         .attr("d", line)
         .attr("stroke", setLineColor(constraintNumber));
-
-    // TESTES PINTAR AREA
-    // console.log("line dataset >> ");
-    // console.log(lineDataset);
-
-    // PAINTING THE AREA
-    // var teste = [{x: 35, y: 25}, {x: 35, y: 0}, {x: 50, y: 25}];
-    // var teste2 = [{x: 25, y: 15}, {x: 40, y: 15}, {x: 25, y: 0}, {x: 100, y: 0}];
-    // svg.append("path")
-    //     .datum(lineDataset)
-    //     .attr("class", "area")
-    //     .attr("d", area);
-
 }
 
 function setObjectiveFunction(goal, objectiveFunction){
@@ -315,8 +282,8 @@ function redefineGraph(constraint) {
     // PLOTTING THE INTERSECTION POINTS BASED ON NEW SCALE
     plotIntersectionPoints(d3.select('#graph-child'));
 
-    // console.log("intersection points: ");
-    // console.log(intersectionPointsArray);
+    // PAINT FEASIBLE REGION
+    //paintFeasibleRegion(d3.select('#graph-child'));
 }
 
 // BASED ON THE CONSTRAINTS EQUATIONS, FIND ALL THE INTERSECTION POINTS, IF EXISTS
@@ -518,4 +485,21 @@ function addingToFarEndingsArray(constraintType, constraintNumber, lineDataset){
         farEndingPointObject.y * objectiveFunctionObject.x2;
 
     farEndingsPointsArray.push(JSON.parse(JSON.stringify(farEndingPointObject)));
+}
+
+function paintFeasibleRegion(svg, teste){
+    var area = d3.svg.area()
+        .x(function(d) { return xScale(d.x); })
+        .y0(height)
+        .y1(function(d) { return yScale(d.y); });
+
+    // svg.append("path")
+    //     .datum(intersectionPointsArray)
+    //     .attr("class", "area")
+    //     .attr("d", area);
+
+    svg.append("path")
+        .datum(teste)
+        .attr("class", "area")
+        .attr("d", area);
 }
